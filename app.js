@@ -198,7 +198,7 @@ function renderApp(state) {
                 <section class="panel placeholder-panel" data-label="// READY">
                   <p class="eyebrow">awaiting_input</p>
                   <h2>$ select subject<span class="cursor"></span></h2>
-                  <p class="panel-copy">왼쪽에서 과목을 선택하면 해당 과목의 중간/기말 시험이 이 영역에 표시됩니다.</p>
+                  <p class="panel-copy">시험 과목 목록 탭에서 과목을 선택하면 해당 과목의 중간/기말 시험이 이 영역에 표시됩니다.</p>
                 </section>
               `
         }

@@ -107,11 +107,20 @@ body::after {
   letter-spacing: 1px;
   line-height: 1.9;
   opacity: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
-.boot-line.green { color: var(--green); }
-.boot-line.amber { color: var(--amber); }
+.boot-line.green { color: var(--green); text-shadow: 0 0 6px var(--green); }
+.boot-line.amber { color: var(--amber); text-shadow: 0 0 6px #ffb30066; }
 .boot-line.show  { animation: fadeIn 0.05s forwards; }
-.boot-line .ok   { color: var(--green); }
+.boot-line .ok   { color: var(--green); text-shadow: 0 0 4px var(--green); }
+.boot-cursor {
+  display: inline-block;
+  margin-left: 1px;
+  color: var(--green);
+  text-shadow: 0 0 6px var(--green);
+  animation: blink 1s step-end infinite;
+}
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .progress-bar-wrap {

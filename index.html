@@ -5,23 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>EXAM_VIEWER :: 시험 답안 터미널</title>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./styles.css?v=2">
   </head>
   <body class="crt-screen">
     <canvas id="matrix-canvas"></canvas>
 
     <div id="boot">
-      <div class="boot-stack">
-        <div class="boot-line green" data-show>EXAM_VIEWER :: BOOT SEQUENCE v1.0.4</div>
-        <div class="boot-line" data-show>Initializing kernel modules... <span class="ok">OK</span></div>
-        <div class="boot-line" data-show>Loading exam database... <span class="ok">OK</span></div>
-        <div class="boot-line" data-show>Mounting subject index... <span class="ok">OK</span></div>
-        <div class="boot-line" data-show>Synchronizing Seoul timezone (Asia/Seoul)... <span class="ok">OK</span></div>
-        <div class="boot-line amber" data-show>ACCESS GRANTED :: secure terminal online</div>
-        <div class="boot-line" data-show style="margin-top:8px">
-          <div class="progress-bar-wrap"><div class="progress-bar"></div></div>
-        </div>
-      </div>
+      <div class="boot-stack" id="boot-stack"></div>
     </div>
 
     <nav class="term-nav">
@@ -47,8 +37,8 @@
       </div>
     </footer>
 
-    <script src="./data/exams.js"></script>
-    <script src="./app.js"></script>
-    <script src="./theme.js"></script>
+    <script src="./data/exams.js?v=2"></script>
+    <script src="./app.js?v=2"></script>
+    <script src="./theme.js?v=2"></script>
   </body>
   </html>
