@@ -24,15 +24,15 @@ function normalizeExamLabel(exam) {
 
 function renderHomeState(exams) {
   if (!exams.length) {
-    return '<section class="panel"><p class="empty-state">표시 가능한 시험이 없습니다.</p></section>';
+    return '<section class="panel" data-label="// SUBJECTS"><p class="empty-state">표시 가능한 시험이 없습니다.</p></section>';
   }
 
   const subjects = groupBySubject(exams);
 
   return `
-    <section class="panel">
+    <section class="panel" data-label="// SUBJECTS">
       <div class="panel-header">
-        <p class="eyebrow">과목 선택</p>
+        <p class="eyebrow">select_subject</p>
         <h2>시험 과목 목록</h2>
       </div>
       <div class="subject-grid">
@@ -71,20 +71,21 @@ function renderExamCard(exam, { nowIso, adminUnlocked }) {
   const unlocked = adminUnlocked || isReleased(exam.releaseAt, nowIso);
   const stateLabel = unlocked ? '공개됨' : '잠김';
   const countdown = unlocked
-    ? '<p class="exam-meta">지금 입장할 수 있습니다.</p>'
-    : `<p class="exam-meta">남은 시간 ${formatCountdownParts(exam.releaseAt, nowIso)}</p>`;
+    ? '<p class="exam-meta">access_granted :: 지금 입장 가능</p>'
+    : `<p class="exam-meta">countdown :: ${formatCountdownParts(exam.releaseAt, nowIso)}</p>`;
   const action = unlocked
-    ? `<button type="button" class="primary-button" data-action="open-exam" data-exam-id="${escapeAttribute(exam.id)}">입장</button>`
-    : `<button type="button" class="secondary-button" data-action="admin-open" data-exam-id="${escapeAttribute(exam.id)}">관리자 열기</button>`;
+    ? `<button type="button" class="primary-button" data-action="open-exam" data-exam-id="${escapeAttribute(exam.id)}">./enter</button>`
+    : `<button type="button" class="secondary-button" data-action="admin-open" data-exam-id="${escapeAttribute(exam.id)}">sudo open</button>`;
 
+  const stateMark = unlocked ? '[ OK ]' : '[ LOCKED ]';
   return `
     <article class="exam-card ${unlocked ? 'exam-card-open' : 'exam-card-locked'}">
       <div class="exam-card-top">
-        <p class="exam-state">${stateLabel}</p>
+        <p class="exam-state">${stateMark}</p>
         <p class="exam-label">${normalizeExamLabel(exam.exam)}</p>
       </div>
       <h3>${escapeHtml(exam.title)}</h3>
-      <p class="exam-meta">공개 시각 ${escapeHtml(exam.releaseAt)}</p>
+      <p class="exam-meta">release_at :: ${escapeHtml(exam.releaseAt)}</p>
       ${countdown}
       ${action}
     </article>
@@ -96,15 +97,15 @@ function renderExamDetail(exam, activeTab = 'answerKey') {
   const explanationActive = activeTab === 'explanations';
 
   return `
-    <section class="panel detail-panel">
+    <section class="panel detail-panel" data-label="// EXAM_DETAIL">
       <div class="panel-header">
-        <p class="eyebrow">시험 상세</p>
+        <p class="eyebrow">exam_detail</p>
         <h2>${escapeHtml(exam.title)}</h2>
-        <p class="detail-meta">${escapeHtml(exam.subject ?? '')} · ${normalizeExamLabel(exam.exam ?? 'midterm')}</p>
+        <p class="detail-meta">${escapeHtml(exam.subject ?? '')} :: ${normalizeExamLabel(exam.exam ?? 'midterm')}</p>
       </div>
       <div class="tab-row">
-        <button type="button" class="tab-button ${answerActive ? 'tab-active' : ''}" data-tab="answerKey">정답표</button>
-        <button type="button" class="tab-button ${explanationActive ? 'tab-active' : ''}" data-tab="explanations">문항별 해설</button>
+        <button type="button" class="tab-button ${answerActive ? 'tab-active' : ''}" data-tab="answerKey">cat answer_key</button>
+        <button type="button" class="tab-button ${explanationActive ? 'tab-active' : ''}" data-tab="explanations">cat explanations</button>
       </div>
       <div class="detail-content">
         ${answerActive ? exam.answerKeyHtml : exam.explanationsHtml}
@@ -135,9 +136,9 @@ function groupBySubject(exams) {
 
 function renderExamList(subjectExams, state) {
   return `
-    <section class="panel">
+    <section class="panel" data-label="// EXAM_LIST">
       <div class="panel-header">
-        <p class="eyebrow">시험 선택</p>
+        <p class="eyebrow">select_exam</p>
         <h2>${escapeHtml(state.selectedSubject)}</h2>
         <p class="panel-copy">공개 전 시험은 서울 시간 기준 카운트다운 후 자동으로 열립니다.</p>
       </div>
@@ -158,16 +159,16 @@ function renderExamList(subjectExams, state) {
 function renderHeader(state) {
   return `
     <header class="hero">
-      <div>
-        <p class="eyebrow">시험 답안 Viewer</p>
-        <h1>정답표와 해설을 과목별로 확인</h1>
-        <p class="hero-copy">과목을 선택하고, 공개 시간이 지나면 시험별 정답표와 문항별 해설을 볼 수 있습니다.</p>
+      <div data-label="// MAIN_TERMINAL">
+        <p class="eyebrow">exam_viewer</p>
+        <h1>EXAM RESULT<br>TERMINAL</h1>
+        <p class="hero-copy">과목을 선택하면 공개 시간이 지난 시험의 정답표와 문항별 해설을 확인할 수 있습니다.</p>
       </div>
-      <div class="clock-card">
-        <p class="clock-label">현재 서울 시각</p>
+      <div class="clock-card" data-label="// SYSTEM_CLOCK">
+        <p class="clock-label">seoul / kst</p>
         <p class="clock-time">${escapeHtml(formatSeoulTime(state.now))}</p>
         <button type="button" class="${state.adminUnlocked ? 'secondary-button' : 'primary-button'}" data-action="toggle-admin">
-          ${state.adminUnlocked ? '관리자 해제' : '관리자 로그인'}
+          ${state.adminUnlocked ? 'logout admin' : 'sudo login'}
         </button>
       </div>
     </header>
@@ -194,10 +195,10 @@ function renderApp(state) {
             : selectedGroup
               ? renderExamList(selectedGroup.exams, state)
               : `
-                <section class="panel placeholder-panel">
-                  <p class="eyebrow">안내</p>
-                  <h2>왼쪽에서 과목을 고르세요.</h2>
-                  <p class="panel-copy">선택한 과목의 중간/기말 시험이 이 영역에 표시됩니다.</p>
+                <section class="panel placeholder-panel" data-label="// READY">
+                  <p class="eyebrow">awaiting_input</p>
+                  <h2>$ select subject<span class="cursor"></span></h2>
+                  <p class="panel-copy">왼쪽에서 과목을 선택하면 해당 과목의 중간/기말 시험이 이 영역에 표시됩니다.</p>
                 </section>
               `
         }
