@@ -61,8 +61,8 @@ test('renderExamCard shows countdown when exam is locked', () => {
     }
   );
 
-  assert.match(html, /잠김/);
-  assert.match(html, /남은 시간/);
+  assert.match(html, /\[ LOCKED \]/);
+  assert.match(html, /countdown :: 01:00:00/);
 });
 
 test('renderHomeState renders subject cards when exams exist', () => {
@@ -82,13 +82,13 @@ test('renderExamDetail includes answer and explanation tabs', () => {
     explanationsHtml: '<p>해설</p>',
   });
 
-  assert.match(html, /정답표/);
-  assert.match(html, /문항별 해설/);
+  assert.match(html, /cat answer_key/);
+  assert.match(html, /cat explanations/);
   assert.match(html, /테스트 시험/);
 });
 
 test('index.html uses classic script entrypoint for file double-click compatibility', () => {
   const html = readFileSync('index.html', 'utf8');
   assert.doesNotMatch(html, /type="module"\s+src="\.\/*app\.js"/);
-  assert.match(html, /<script src="\.\/app\.js"><\/script>/);
+  assert.match(html, /<script src="\.\/app\.js(?:\?v=\d+)?"><\/script>/);
 });

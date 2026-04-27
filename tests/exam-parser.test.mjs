@@ -5,6 +5,7 @@ import { parseExamMarkdown } from '../scripts/lib/exam-parser.mjs';
 import { buildExamDataset } from '../scripts/build-exams.mjs';
 
 const EXAM_FILE = '2026_뇌과학개론_중간고사_검토_정답_해설.md';
+const PRECLINICAL_EXAM_FILE = '2026_1학기_전임상개론_중간고사_정답_해설.md';
 
 test('parseExamMarkdown extracts metadata and split sections', () => {
   const source = readFileSync(EXAM_FILE, 'utf8');
@@ -14,6 +15,17 @@ test('parseExamMarkdown extracts metadata and split sections', () => {
   assert.equal(exam.exam, 'midterm');
   assert.equal(exam.releaseAt, '2026-04-21T14:00:00+09:00');
   assert.match(exam.answerKeyHtml, /<table>/i);
+  assert.match(exam.explanationsHtml, /1번/);
+});
+
+test('parseExamMarkdown loads preclinical midterm for noon release', () => {
+  const source = readFileSync(PRECLINICAL_EXAM_FILE, 'utf8');
+  const exam = parseExamMarkdown(source, PRECLINICAL_EXAM_FILE);
+
+  assert.equal(exam.subject, '전임상개론');
+  assert.equal(exam.exam, 'midterm');
+  assert.equal(exam.releaseAt, '2026-04-27T12:00:00+09:00');
+  assert.match(exam.answerKeyHtml, /30/);
   assert.match(exam.explanationsHtml, /1번/);
 });
 
